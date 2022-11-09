@@ -39,7 +39,7 @@ const Home = () => {
       <HomeCarousel />
 
       {/* Start Home item */}
-      <div className="container mx-auto p-4 pb-24">
+      <div className="container mx-auto p-4 pb-24 max-w-7xl">
         <section className="text-gray-600 body-font ">
           <div className="container px-5 py-24 mx-auto">
             <MultipleRowSlick
