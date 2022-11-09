@@ -1,0 +1,19 @@
+.Detail .ant-tabs-ink-bar {
+  border-bottom: 2px solid #fb4226;
+}
+
+.Detail .ant-tabs-tab span.labelTabs {
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 0 0.25px #000;
+}
+
+.Detail .ant-tabs-tab.ant-tabs-tab-active span.labelTabs {
+  color: #fb4226;
+  font-weight: bold;
+}
+.Detail .ant-tabs-tab:hover span.labelTabs {
+  color: #fb4226;
+}
