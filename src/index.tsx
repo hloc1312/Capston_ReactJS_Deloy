@@ -1,5 +1,7 @@
+// import React from "react";
+// import ReactDOM from "react-dom/client";
 import React from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -18,9 +20,9 @@ import * as signalR from "@microsoft/signalr";
 // import í8next
 import "./i18n";
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+// const root = ReactDOM.createRoot(
+//   document.getElementById("root") as HTMLElement
+// );
 
 export const connection = new signalR.HubConnectionBuilder()
   .withUrl("https://movienew.cybersoft.edu.vn/DatVeHub")
@@ -30,10 +32,17 @@ export const connection = new signalR.HubConnectionBuilder()
 connection
   .start()
   .then(() => {
-    root.render(
+    // root.render(
+    //   <Provider store={store}>
+    //     <App />
+    //   </Provider>
+    // );
+
+    ReactDOM.render(
       <Provider store={store}>
         <App />
-      </Provider>
+      </Provider>,
+      document.getElementById("root")
     );
   })
   .catch((err) => console.log(err));

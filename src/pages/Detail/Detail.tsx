@@ -51,21 +51,28 @@ const Detail = (props: CustomCardProps) => {
     dispatch(getListLichChieuTheoPhim(params.id || ""));
   }, []);
   return (
-    <div
-      style={{
-        backgroundImage: `url(${filmDetail?.hinhAnh})`,
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-      className="Detail"
-    >
-      <CustomCard
+    <div className="relative ">
+      <div
+        style={{
+          backgroundImage: `url(${filmDetail?.hinhAnh})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "blur(5px)",
+        }}
+        className="Detail min-h-screen  !py-[600px] "
+      >
+        {/* <CustomCard
         className="min-h-screen !pt-[150px]"
         effectColor="#000" // required
         color="#000" // default color is white
         blur={6} // default blur value is 10px
         borderRadius={0} // default border radius value is 10px
+      ></CustomCard> */}
+      </div>
+      <div
+        className="absolute top-[50%] Detail"
+        style={{ transform: "translateY(-50%)" }}
       >
         <div className="grid grid-cols-12">
           <div className="col-span-5 col-start-3">
@@ -334,7 +341,7 @@ const Detail = (props: CustomCardProps) => {
             }
           })}
         />
-      </CustomCard>
+      </div>
     </div>
   );
 };
