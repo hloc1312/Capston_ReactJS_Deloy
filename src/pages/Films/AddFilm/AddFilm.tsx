@@ -6,23 +6,44 @@ import {
   Form,
   Input,
   InputNumber,
+  Modal,
   Radio,
   Select,
   Switch,
   TreeSelect,
 } from "antd";
+import { CheckCircleFilled } from "@ant-design/icons";
 import { useFormik } from "formik";
 import moment from "moment";
 import * as Yup from "yup";
 import { GROUPID } from "../../../utils/config";
-import { useAppDispath } from "../../../store/configStore";
+import { RootState, useAppDispath } from "../../../store/configStore";
 import { themPhimUploadHinh } from "../../../store/quanLyPhim";
 import { ThemPhimUploadHinh } from "../../../types/quanLyPhimTypes";
+import { useSelector } from "react-redux";
+import Loading from "../../../components/Molecules/Loading/Loading";
+import { useNavigate } from "react-router-dom";
 type SizeType = Parameters<typeof Form>[0]["size"];
 const AddFilm = () => {
   const [componentSize, setComponentSize] = useState("default");
   const [imgSrc, setImgSrc] = useState("");
   const [errSrcImg, setErrSrcImg] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    navigate("/admin/films");
+    setIsModalOpen(false);
+    // dispatch(xoaPhim(findMaPhim?.maPhim as number));
+  };
+  const { isFetchingThemPhim, errThemPhim } = useSelector(
+    (state: RootState) => {
+      return state.quanLyPhimReducer;
+    }
+  );
   const dispatch = useAppDispath();
   const formik = useFormik({
     initialValues: {
@@ -56,7 +77,11 @@ const AddFilm = () => {
         formData.append(key, values[key]);
       }
       // console.log(formData.get("maNhom"));
-      dispatch(themPhimUploadHinh(formData));
+      dispatch(themPhimUploadHinh(formData))
+        .unwrap()
+        .then(() => {
+          showModal();
+        });
     },
   });
   const handChangeDataPicker = (value: any) => {
@@ -102,7 +127,9 @@ const AddFilm = () => {
       setErrSrcImg("Không hỗ trợ định dạng file này");
     }
   };
-
+  if (isFetchingThemPhim) {
+    return <Loading />;
+  }
   return (
     <div>
       {" "}
@@ -188,6 +215,35 @@ const AddFilm = () => {
           </button>
         </Form.Item>
       </Form>
+      <Modal
+        title={<span className="text-green-500">Thêm phim thành công</span>}
+        open={isModalOpen}
+        onOk={handleOk}
+        destroyOnClose
+        closable={false}
+        footer={[
+          <div className="text-center">
+            <button
+              type="button"
+              className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg  text-sm px-5 py-2.5 text-center mr-2 mb-2"
+              onClick={handleOk}
+            >
+              OK
+            </button>
+          </div>,
+        ]}
+      >
+        <div className="text-center">
+          <CheckCircleFilled
+            className="text-4xl mb-2 text-green-500"
+            style={{ color: "rgb(34 197 94) " }}
+          />
+          <br />
+          <p className="uppercase text-green-500 font-bold text-3xl">
+            THêm phim thành công!
+          </p>
+        </div>
+      </Modal>
     </div>
   );
 };

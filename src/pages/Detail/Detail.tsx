@@ -15,7 +15,14 @@ import {
 } from "../../utils/localStore";
 import ReactPlayer from "react-player";
 type TabPosition = "left";
-const Detail = () => {
+type CustomCardProps = React.HTMLAttributes<HTMLDivElement> & {
+  borderRadius?: number;
+  blur?: number;
+  color?: string;
+  effectColor?: string;
+  content?: HTMLElement;
+};
+const Detail = (props: CustomCardProps) => {
   const [tabPosition, setTabPosition] = useState<TabPosition>("left");
   const { filmDetail } = useSelector((state: RootState) => {
     return state.quanLyPhimReducer;
