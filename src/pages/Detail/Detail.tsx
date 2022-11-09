@@ -60,7 +60,7 @@ const Detail = (props: CustomCardProps) => {
           backgroundPosition: "center",
           filter: "blur(5px)",
         }}
-        className="Detail min-h-screen  !py-[600px] "
+        className="Detail min-h-screen  !py-[500px] "
       >
         {/* <CustomCard
         className="min-h-screen !pt-[150px]"

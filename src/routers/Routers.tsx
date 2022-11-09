@@ -152,7 +152,26 @@ const Routers = () => {
     },
     {
       path: "/admin",
-      element: <AdminTemplateLazy />,
+      element: (
+        <Suspense
+          fallback={
+            <div
+              className="example"
+              style={{
+                margin: "20px 0",
+                marginBottom: "20px",
+                padding: "30px 50px",
+                textAlign: "center",
+                borderRadius: "4px",
+              }}
+            >
+              <Spin />
+            </div>
+          }
+        >
+          <AdminTemplateLazy />
+        </Suspense>
+      ),
       children: [
         {
           path: "users",
