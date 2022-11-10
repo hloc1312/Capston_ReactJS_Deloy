@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Collapse, Form, Input } from "antd";
+import { Button, Collapse, Form, Input, Modal } from "antd";
 import { RootState, useAppDispath } from "../../store/configStore";
 import { useSelector } from "react-redux";
 import moment from "moment";
@@ -8,14 +8,29 @@ import {
   lichSuNguoiDungDatVe,
 } from "../../store/quanLyNguoiDung";
 import { useFormik } from "formik";
-import { quanLyNguoiDungService } from "../../services/quanLyNguoiDungService";
-import { USER_LOGIN } from "../../utils/config";
+import { CheckCircleFilled } from "@ant-design/icons";
+import * as Yup from "yup";
+import Loading from "../../components/Molecules/Loading/Loading";
+
 const Profile = () => {
   const { Panel } = Collapse;
   const dispatch = useAppDispath();
-  const { thongTinNguoiDung } = useSelector((state: RootState) => {
-    return state.quanLyNguoiDungReducer;
-  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+    // navigate("/admin/films");
+  };
+  const phoneRegExp = /^(84|0[3|5|7|8|9])+([0-9]{8})\b$/;
+
+  const { thongTinNguoiDung, isFetchingCapNhat, errCapNhat } = useSelector(
+    (state: RootState) => {
+      return state.quanLyNguoiDungReducer;
+    }
+  );
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -27,17 +42,62 @@ const Profile = () => {
       maLoaiNguoiDung: thongTinNguoiDung?.maLoaiNguoiDung,
       hoTen: thongTinNguoiDung?.hoTen,
     },
+    validationSchema: Yup.object({
+      matKhau: Yup.string().required("Mật khẩu không được bỏ trống!"),
+      email: Yup.string()
+        .email("Định dạng email không đúng!")
+        .required("Email không được bỏ trống!"),
+      soDt: Yup.string()
+        .matches(phoneRegExp, "Định dạng số điện thoại không đúng!")
+        .required("Số điện thoại không được bỏ trống!"),
+      hoTen: Yup.string().required("Họ tên không được để trống!"),
+    }),
     onSubmit: (values: any) => {
       console.log("values", values);
-      dispatch(capNhatThongTinNguoiDung(values));
+      dispatch(capNhatThongTinNguoiDung(values))
+        .unwrap()
+        .then(() => {
+          showModal();
+        });
     },
   });
   useEffect(() => {
     dispatch(lichSuNguoiDungDatVe());
   }, []);
-
+  if (isFetchingCapNhat) {
+    return <Loading />;
+  }
   return (
     <div className="ThongTinCaNhan container mx-auto py-20 pt-[150px]">
+      <Modal
+        title={<span className="text-green-500">Cập nhật thành công</span>}
+        open={isModalOpen}
+        onOk={handleOk}
+        destroyOnClose
+        closable={false}
+        footer={[
+          <div className="text-center">
+            <button
+              type="button"
+              className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg  text-sm px-5 py-2.5 text-center mr-2 mb-2"
+              onClick={handleOk}
+            >
+              OK
+            </button>
+          </div>,
+        ]}
+      >
+        <div className="text-center">
+          <CheckCircleFilled
+            className="text-4xl mb-2 text-green-500"
+            style={{ color: "rgb(34 197 94) " }}
+          />
+          <br />
+          <p className="uppercase text-green-500 font-bold text-3xl">
+            cập nhật thành công!
+          </p>
+        </div>
+      </Modal>
       <p className="text-xl text-center mb-10 font-bold uppercase">
         Trang cá nhân
       </p>
@@ -163,6 +223,9 @@ const Profile = () => {
                 value={formik.values.matKhau}
                 onChange={formik.handleChange}
               />
+              {formik.errors.matKhau && formik.touched ? (
+                <p className="text-red-500">{formik.errors?.matKhau}</p>
+              ) : null}
             </Form.Item>
             <Form.Item label="Email">
               <Input
@@ -170,6 +233,9 @@ const Profile = () => {
                 value={formik.values.email}
                 onChange={formik.handleChange}
               />
+              {formik.errors.email && formik.touched ? (
+                <p className="text-red-500">{formik.errors?.email}</p>
+              ) : null}
             </Form.Item>
             <Form.Item label="Họ tên">
               <Input
@@ -177,6 +243,9 @@ const Profile = () => {
                 value={formik.values.hoTen}
                 onChange={formik.handleChange}
               />
+              {formik.errors.hoTen && formik.touched ? (
+                <p className="text-red-500">{formik.errors?.hoTen}</p>
+              ) : null}
             </Form.Item>
             <Form.Item label="Số điện thoại">
               <Input
@@ -184,9 +253,17 @@ const Profile = () => {
                 value={formik.values.soDt}
                 onChange={formik.handleChange}
               />
+              {formik.errors.soDt && formik.touched ? (
+                <p className="text-red-500">{formik.errors?.soDt}</p>
+              ) : null}
             </Form.Item>
 
             <Form.Item wrapperCol={{ offset: 5, span: 16 }}>
+              {errCapNhat !== "" ? (
+                <p className="text-red-500 font-bold">{errCapNhat.content}</p>
+              ) : (
+                ""
+              )}
               <Button type="primary" htmlType="submit">
                 Cập nhật
               </Button>

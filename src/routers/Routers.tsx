@@ -19,6 +19,7 @@ import News from "../pages/News/News";
 import Profile from "../pages/Profile/Profile";
 import Register from "../pages/Register/Register";
 import ShowTime from "../pages/ShowTime/ShowTime";
+import Users from "../pages/Users/Users";
 
 const CheckoutTemplateLazy = lazy(
   () => import("../components/Layouts/CheckoutTemplate/CheckoutTemplate")
@@ -175,7 +176,7 @@ const Routers = () => {
       children: [
         {
           path: "users",
-          element: <Dashboard />,
+          element: <Users />,
         },
         {
           path: "films",

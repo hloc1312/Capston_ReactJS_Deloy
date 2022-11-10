@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { quanLyNguoiDungService } from "../../services/quanLyNguoiDungService";
 import {
   CapNhatThongTinNguoiDung,
+  DanhSachNguoiDung,
   GetThongTinNguoiDung,
   User,
   UserLogin,
@@ -21,6 +22,9 @@ interface InitialState {
   errRegister: any;
   isFetchingCapNhat: boolean;
   errCapNhat: any;
+  danhSachNguoiDung: DanhSachNguoiDung[];
+  isFetchingDSNguoiDung: boolean;
+  errDSNguoiDung: any;
 }
 
 let userLocalStorage = {};
@@ -38,6 +42,18 @@ const initialState: InitialState = {
   errRegister: "",
   isFetchingCapNhat: false,
   errCapNhat: "",
+  isFetchingDSNguoiDung: false,
+  errDSNguoiDung: "",
+  danhSachNguoiDung: [
+    {
+      taiKhoan: "test1312",
+      hoTen: "hello1312",
+      email: "abcHello13121@gmail.com",
+      soDT: "0909123123",
+      matKhau: "1312",
+      maLoaiNguoiDung: "QuanTri",
+    },
+  ],
 };
 export const {
   reducer: quanLyNguoiDungReducer,
@@ -101,6 +117,18 @@ export const {
       .addCase(capNhatThongTinNguoiDung.rejected, (state, action) => {
         state.isFetchingCapNhat = false;
         state.errCapNhat = action.payload;
+      })
+      // Lấy danh sách nguoi dung
+      .addCase(danhSachNguoiDungAction.pending, (state, action) => {
+        state.isFetchingDSNguoiDung = true;
+      })
+      .addCase(danhSachNguoiDungAction.fulfilled, (state, action) => {
+        state.isFetchingDSNguoiDung = false;
+        state.danhSachNguoiDung = action.payload;
+      })
+      .addCase(danhSachNguoiDungAction.rejected, (state, action) => {
+        state.isFetchingDSNguoiDung = false;
+        state.errDSNguoiDung = action.payload;
       });
   },
 });
@@ -159,6 +187,18 @@ export const capNhatThongTinNguoiDung = createAsyncThunk(
         thongTinNguoiDung
       );
       dispatch(lichSuNguoiDungDatVe());
+      return result.data.content;
+    } catch (err: any) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const danhSachNguoiDungAction = createAsyncThunk(
+  "quanLyNguoiDung/DanhSachNguoiDung",
+  async (timKiem: string, { rejectWithValue }) => {
+    try {
+      const result = await quanLyNguoiDungService.layDanhSachNguoiDung(timKiem);
       return result.data.content;
     } catch (err: any) {
       return rejectWithValue(err.response.data);

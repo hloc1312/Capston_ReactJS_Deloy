@@ -83,3 +83,12 @@ export interface CapNhatThongTinNguoiDung {
   maLoaiNguoiDung: string;
   hoTen: string;
 }
+
+export interface DanhSachNguoiDung {
+  taiKhoan: string;
+  hoTen: string;
+  email: string;
+  soDT: string;
+  matKhau: string;
+  maLoaiNguoiDung: string;
+}

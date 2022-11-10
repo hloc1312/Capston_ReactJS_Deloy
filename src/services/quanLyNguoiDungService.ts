@@ -1,6 +1,7 @@
 import { api } from "../constants/api";
 import {
   CapNhatThongTinNguoiDung,
+  DanhSachNguoiDung,
   GetThongTinNguoiDung,
   ThongTinNguoiDung,
   User,
@@ -45,6 +46,17 @@ export const quanLyNguoiDungService = {
     return api.put<HttpResponse<CapNhatThongTinNguoiDung>>(
       "QuanLyNguoiDung/CapNhatThongTinNguoiDung",
       thongTinNguoiDung
+    );
+  },
+
+  layDanhSachNguoiDung: (timKiem: string = "") => {
+    if (timKiem.trim() === "") {
+      return api.get<HttpResponse<DanhSachNguoiDung[]>>(
+        `QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=${GROUPID}`
+      );
+    }
+    return api.get<HttpResponse<DanhSachNguoiDung[]>>(
+      `QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=${GROUPID}&tuKhoa=${timKiem}`
     );
   },
 };
