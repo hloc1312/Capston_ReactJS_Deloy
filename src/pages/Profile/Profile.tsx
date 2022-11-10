@@ -1,33 +1,41 @@
-import React, { useEffect } from "react";
-import { Collapse } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Collapse, Form, Input } from "antd";
 import { RootState, useAppDispath } from "../../store/configStore";
 import { useSelector } from "react-redux";
 import moment from "moment";
-import { lichSuNguoiDungDatVe } from "../../store/quanLyNguoiDung";
+import {
+  capNhatThongTinNguoiDung,
+  lichSuNguoiDungDatVe,
+} from "../../store/quanLyNguoiDung";
 import { useFormik } from "formik";
+import { quanLyNguoiDungService } from "../../services/quanLyNguoiDungService";
+import { USER_LOGIN } from "../../utils/config";
 const Profile = () => {
   const { Panel } = Collapse;
-  const formik = useFormik({
-    initialValues: {
-      taiKhoan: "",
-      matKhau: "",
-      email: "",
-      soDt: "",
-      maNhom: "",
-      maLoaiNguoiDung: "",
-      hoTen: "",
-    },
-    onSubmit: (values) => {
-      console.log("values", values);
-    },
-  });
   const dispatch = useAppDispath();
   const { thongTinNguoiDung } = useSelector((state: RootState) => {
     return state.quanLyNguoiDungReducer;
   });
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      taiKhoan: thongTinNguoiDung?.taiKhoan,
+      matKhau: thongTinNguoiDung?.matKhau,
+      email: thongTinNguoiDung?.email,
+      soDt: thongTinNguoiDung?.soDT,
+      maNhom: thongTinNguoiDung?.maNhom,
+      maLoaiNguoiDung: thongTinNguoiDung?.maLoaiNguoiDung,
+      hoTen: thongTinNguoiDung?.hoTen,
+    },
+    onSubmit: (values: any) => {
+      console.log("values", values);
+      dispatch(capNhatThongTinNguoiDung(values));
+    },
+  });
   useEffect(() => {
     dispatch(lichSuNguoiDungDatVe());
   }, []);
+
   return (
     <div className="ThongTinCaNhan container mx-auto py-20 pt-[150px]">
       <p className="text-xl text-center mb-10 font-bold uppercase">
@@ -123,6 +131,67 @@ const Profile = () => {
               </div>
             ))}
           </div>
+        </Panel>
+        <Panel
+          header={
+            <span className="text-lg font-semibold text-amber-500">
+              Cập nhật thông tin cá nhân
+            </span>
+          }
+          key="2"
+        >
+          <Form
+            name="basic"
+            labelCol={{ span: 5 }}
+            wrapperCol={{ span: 16 }}
+            initialValues={{ remember: true }}
+            autoComplete="off"
+            onSubmitCapture={formik.handleSubmit}
+          >
+            <Form.Item label="Tài khoản">
+              <Input
+                name="taiKhoan"
+                value={formik.values.taiKhoan as string}
+                onChange={formik.handleChange}
+                disabled={true}
+              />
+            </Form.Item>
+
+            <Form.Item label="Mật khẩu">
+              <Input.Password
+                name="matKhau"
+                value={formik.values.matKhau}
+                onChange={formik.handleChange}
+              />
+            </Form.Item>
+            <Form.Item label="Email">
+              <Input
+                name="email"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+              />
+            </Form.Item>
+            <Form.Item label="Họ tên">
+              <Input
+                name="hoTen"
+                value={formik.values.hoTen}
+                onChange={formik.handleChange}
+              />
+            </Form.Item>
+            <Form.Item label="Số điện thoại">
+              <Input
+                name="soDt"
+                value={formik.values.soDt}
+                onChange={formik.handleChange}
+              />
+            </Form.Item>
+
+            <Form.Item wrapperCol={{ offset: 5, span: 16 }}>
+              <Button type="primary" htmlType="submit">
+                Cập nhật
+              </Button>
+            </Form.Item>
+          </Form>
         </Panel>
       </Collapse>
     </div>

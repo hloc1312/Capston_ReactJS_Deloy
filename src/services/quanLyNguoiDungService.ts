@@ -1,5 +1,6 @@
 import { api } from "../constants/api";
 import {
+  CapNhatThongTinNguoiDung,
   GetThongTinNguoiDung,
   ThongTinNguoiDung,
   User,
@@ -37,6 +38,13 @@ export const quanLyNguoiDungService = {
   postLayThongTinNguoiDung: (taiKhoan: string) => {
     return api.post<HttpResponse<ThongTinNguoiDung>>(
       `QuanLyNguoiDung/LayThongTinNguoiDung?taiKhoan=${taiKhoan}`
+    );
+  },
+
+  capNhatThongTinNguoiDung: (thongTinNguoiDung: CapNhatThongTinNguoiDung) => {
+    return api.put<HttpResponse<CapNhatThongTinNguoiDung>>(
+      "QuanLyNguoiDung/CapNhatThongTinNguoiDung",
+      thongTinNguoiDung
     );
   },
 };

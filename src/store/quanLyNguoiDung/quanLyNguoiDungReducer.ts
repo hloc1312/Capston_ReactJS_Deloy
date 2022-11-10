@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { quanLyNguoiDungService } from "../../services/quanLyNguoiDungService";
 import {
+  CapNhatThongTinNguoiDung,
   GetThongTinNguoiDung,
   User,
   UserLogin,
@@ -18,6 +19,8 @@ interface InitialState {
   errThongTinNguoiDung: any;
   isFetchingRegister: boolean;
   errRegister: any;
+  isFetchingCapNhat: boolean;
+  errCapNhat: any;
 }
 
 let userLocalStorage = {};
@@ -33,6 +36,8 @@ const initialState: InitialState = {
   isFetchingThongTinNguoiDung: false,
   isFetchingRegister: false,
   errRegister: "",
+  isFetchingCapNhat: false,
+  errCapNhat: "",
 };
 export const {
   reducer: quanLyNguoiDungReducer,
@@ -84,6 +89,18 @@ export const {
       .addCase(dangKyAction.rejected, (state, action) => {
         state.isFetchingRegister = false;
         state.errRegister = action.payload;
+      })
+      // Cap Nhat
+      .addCase(capNhatThongTinNguoiDung.pending, (state, action) => {
+        state.isFetchingCapNhat = true;
+      })
+      .addCase(capNhatThongTinNguoiDung.fulfilled, (state, action) => {
+        state.isFetchingCapNhat = false;
+        state.errCapNhat = "";
+      })
+      .addCase(capNhatThongTinNguoiDung.rejected, (state, action) => {
+        state.isFetchingCapNhat = false;
+        state.errCapNhat = action.payload;
       });
   },
 });
@@ -125,6 +142,24 @@ export const dangKyAction = createAsyncThunk(
       if (result.data.statusCode === 200) {
         return result.data.content;
       }
+    } catch (err: any) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const capNhatThongTinNguoiDung = createAsyncThunk(
+  "quanLyNguoiDung/capNhatThongTinNguoiDung",
+  async (
+    thongTinNguoiDung: CapNhatThongTinNguoiDung,
+    { dispatch, rejectWithValue }
+  ) => {
+    try {
+      const result = await quanLyNguoiDungService.capNhatThongTinNguoiDung(
+        thongTinNguoiDung
+      );
+      dispatch(lichSuNguoiDungDatVe());
+      return result.data.content;
     } catch (err: any) {
       return rejectWithValue(err.response.data);
     }
