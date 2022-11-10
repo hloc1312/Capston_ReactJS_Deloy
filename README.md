@@ -1,4 +1,4 @@
 # Capstone ReactJS (Movie):
 
-    - Nguyễn Hoàng Lộc
-    - Phạm Gia Phát
+    - Nguyễn Hoàng Lộc (HomeTemplate, CheckoutTemplate)
+    - Phạm Gia Phát (UserTemplate, AdminTemplate)
