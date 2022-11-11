@@ -1,8 +1,11 @@
 import { api } from "../constants/api";
 import {
+  CapNhatNguoiDung,
   CapNhatThongTinNguoiDung,
   DanhSachNguoiDung,
   GetThongTinNguoiDung,
+  LoaiNguoiDung,
+  ThemNguoiDung,
   ThongTinNguoiDung,
   User,
   UserLogin,
@@ -57,6 +60,30 @@ export const quanLyNguoiDungService = {
     }
     return api.get<HttpResponse<DanhSachNguoiDung[]>>(
       `QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=${GROUPID}&tuKhoa=${timKiem}`
+    );
+  },
+
+  xoaNguoiDung: (taiKhoan: string) => {
+    return api.delete(`QuanLyNguoiDung/XoaNguoiDung?TaiKhoan=${taiKhoan}`);
+  },
+
+  layDanhSachLoaiNguoiDung: () => {
+    return api.get<HttpResponse<LoaiNguoiDung[]>>(
+      "QuanLyNguoiDung/LayDanhSachLoaiNguoiDung"
+    );
+  },
+
+  themNguoiDung: (themNguoiDung: ThemNguoiDung) => {
+    return api.post<HttpResponse<ThemNguoiDung>>(
+      `QuanLyNguoiDung/ThemNguoiDung`,
+      themNguoiDung
+    );
+  },
+
+  capNhatThongTinNguoiDungAdmin: (thongTinNguoiDung: CapNhatNguoiDung) => {
+    return api.post<HttpResponse<CapNhatNguoiDung>>(
+      "QuanLyNguoiDung/CapNhatThongTinNguoiDung",
+      thongTinNguoiDung
     );
   },
 };

@@ -198,7 +198,7 @@ const Profile = () => {
               Cập nhật thông tin cá nhân
             </span>
           }
-          key="2"
+          key={"2"}
         >
           <Form
             name="basic"

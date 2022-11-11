@@ -19,6 +19,8 @@ import News from "../pages/News/News";
 import Profile from "../pages/Profile/Profile";
 import Register from "../pages/Register/Register";
 import ShowTime from "../pages/ShowTime/ShowTime";
+import AddUser from "../pages/Users/AddUser/AddUser";
+import EditUser from "../pages/Users/EditUser/EditUser";
 import Users from "../pages/Users/Users";
 
 const CheckoutTemplateLazy = lazy(
@@ -177,6 +179,14 @@ const Routers = () => {
         {
           path: "users",
           element: <Users />,
+        },
+        {
+          path: "users/adduser",
+          element: <AddUser />,
+        },
+        {
+          path: "users/edituser/:id",
+          element: <EditUser />,
         },
         {
           path: "films",

@@ -132,7 +132,7 @@ const ShowTime = () => {
   if (localStorage.getItem("film")) {
     film = JSON.parse(localStorage.getItem("film") as string);
   }
-  console.log({ film });
+  // console.log({ film });
 
   return (
     <Form
